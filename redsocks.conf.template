@@ -49,7 +49,7 @@ redsocks {
 
 
 	// known types: socks4, socks5, http-connect, http-relay
-	type = socks5;
+	type = ${upstream_mode};
 
 	// login = "foobar";
 	// password = "baz";
