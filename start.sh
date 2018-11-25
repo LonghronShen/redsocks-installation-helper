@@ -27,6 +27,5 @@ iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner $specificUser -j REDSOCKS
 
 # You can also control that in more precise way using `gid-owner` from
 # iptables.
-groupadd socksified
-usermod --append --groups socksified $specificUser
-iptables -t nat -A OUTPUT -p tcp -m owner --gid-owner socksified -j REDSOCKS
+usermod --append --groups redsocks $specificUser
+iptables -t nat -A OUTPUT -p tcp -m owner --gid-owner redsocks -j REDSOCKS
