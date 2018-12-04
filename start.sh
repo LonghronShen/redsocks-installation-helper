@@ -3,7 +3,7 @@
 specificUser="${1:-root}"
 
 #不重定向目的地址为服务器的包
-iptables -t nat -A OUTPUT -d 127.0.0.1 -j RETURN  #请用你的shadowsocks服务器的地址替换$SERVER_IP
+iptables -t nat -A OUTPUT -d 127.0.0.1 -j RETURN
 
 #不重定向私有地址的流量
 iptables -t nat -A OUTPUT -d 10.0.0.0/8 -j RETURN
