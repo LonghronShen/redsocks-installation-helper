@@ -8,6 +8,7 @@ export upstream_mode="${3:-socks5}"
 
 echo "$upstream_ip, $upstream_port, $upstream_mode"
 
+apt purge -y redsocks
 apt update && apt install -y redsocks gettext
 
 envsubst < redsocks.conf.template > /etc/redsocks.conf
