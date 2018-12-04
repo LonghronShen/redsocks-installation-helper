@@ -12,4 +12,7 @@ apt update && apt install -y redsocks gettext
 
 envsubst < redsocks.conf.template > /etc/redsocks.conf
 
+mkdir -p /etc/iptables
+envsubst < redsocks.rules.template > /etc/iptables/redsocks.rules
+
 service redsocks restart

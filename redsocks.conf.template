@@ -63,10 +63,10 @@ redudp {
 	local_port = 10053;
 
 	// `ip' and `port' of socks5 proxy server.
-	ip = 192.0.2.1;
-	port = 1080;
-	login = username;
-	password = pazzw0rd;
+	ip = ${upstream_ip};
+	port = ${upstream_port};
+	// login = username;
+	// password = pazzw0rd;
 
 	// kernel does not give us this information, so we have to duplicate it
 	// in both iptables rules and configuration file.  By the way, you can
