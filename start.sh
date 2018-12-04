@@ -2,28 +2,19 @@
 
 specificUser="${1:-root}"
 
-# Create new chain
-iptables -t nat -N REDSOCKS
+#不重定向目的地址为服务器的包
+iptables -t nat -A OUTPUT -d 127.0.0.1 -j RETURN  #请用你的shadowsocks服务器的地址替换$SERVER_IP
 
-# Ignore LANs and some other reserved addresses.
-# See http://en.wikipedia.org/wiki/Reserved_IP_addresses#Reserved_IPv4_addresses
-# and http://tools.ietf.org/html/rfc5735 for full list of reserved networks.
-iptables -t nat -A REDSOCKS -d 0.0.0.0/8 -j RETURN
-iptables -t nat -A REDSOCKS -d 10.0.0.0/8 -j RETURN
-iptables -t nat -A REDSOCKS -d 100.64.0.0/10 -j RETURN
-iptables -t nat -A REDSOCKS -d 127.0.0.0/8 -j RETURN
-iptables -t nat -A REDSOCKS -d 169.254.0.0/16 -j RETURN
-iptables -t nat -A REDSOCKS -d 172.16.0.0/12 -j RETURN
-iptables -t nat -A REDSOCKS -d 192.168.0.0/16 -j RETURN
-iptables -t nat -A REDSOCKS -d 198.18.0.0/15 -j RETURN
-iptables -t nat -A REDSOCKS -d 224.0.0.0/4 -j RETURN
-iptables -t nat -A REDSOCKS -d 240.0.0.0/4 -j RETURN
+#不重定向私有地址的流量
+iptables -t nat -A OUTPUT -d 10.0.0.0/8 -j RETURN
+iptables -t nat -A OUTPUT -d 172.16.0.0/16 -j RETURN
+iptables -t nat -A OUTPUT -d 192.168.0.0/16 -j RETURN
 
-# Anything else should be redirected to port 12345
-iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports 12345
+#不重定向保留地址的流量,这一步很重要
+iptables -t nat -A OUTPUT -d 127.0.0.0/8 -j RETURN
 
-# Any tcp connection made by `$specificUser' should be redirected.
-iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner $specificUser -j REDSOCKS
+#重定向所有不满足以上条件的流量到redsocks监听的12345端口
+iptables -t nat -A OUTPUT -p tcp -j REDIRECT --to-ports 12345
 
 # You can also control that in more precise way using `gid-owner` from
 # iptables.
